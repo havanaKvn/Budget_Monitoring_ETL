@@ -16,7 +16,7 @@ def extract_raw_transaction(file_path):
 
     for chunk in chunks:
         # Open a file in write mode
-        file = open(stored_in + "Transactions_Extracted_Test" + str(today)+ ".txt", "w")
+        file = open(stored_in + "Transactions_Extracted_" + str(today)+ ".txt", "w")
         # Write some text to the file
         file.write(chunk)
         # Close the file
@@ -33,13 +33,17 @@ def extract_account_details(file_path):
     #### Extract Account Details
     chunks = text.split('\n\n') 
 
-    file = open( stored_in + "Account_details_Test" + str(today) + ".txt", "w")
-    
-    for chunk in chunks:
-        # Write some text to the file
-        file.write(chunk)
-        # Close the file
-        file.close() 
+    i = 0
+    for chunk in chunks:   
+        if i < 1:
+            file = open( stored_in + "Account_details_" + str(today) + ".txt", "w")
+            # Write some text to the file
+            file.write(chunk)
+            # Close the file
+            file.close() 
+        i +=1
+        
+        
 
 if __name__ == "__main__":
     # Provide the path to your text file
@@ -48,4 +52,4 @@ if __name__ == "__main__":
     extract_raw_transaction(file_path)
     extract_account_details(file_path)
     
-    print(today)
+    print("Extract Succed on " + str(today))
