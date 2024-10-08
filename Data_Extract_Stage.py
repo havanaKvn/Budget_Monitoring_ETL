@@ -16,7 +16,7 @@ def extract_raw_transaction(file_path):
 
     for chunk in chunks:
         # Open a file in write mode
-        file = open(stored_in + "Transactions_Extracted_" + str(today)+ ".txt", "w")
+        file = open(stored_in + "Transactions_Extracted_" + str(today)+ ".csv", "w")
         # Write some text to the file
         file.write(chunk)
         # Close the file
@@ -36,7 +36,7 @@ def extract_account_details(file_path):
     i = 0
     for chunk in chunks:   
         if i < 1:
-            file = open( stored_in + "Account_details_" + str(today) + ".txt", "w")
+            file = open( stored_in + "Account_details_" + str(today) + ".csv", "w")
             # Write some text to the file
             file.write(chunk)
             # Close the file
