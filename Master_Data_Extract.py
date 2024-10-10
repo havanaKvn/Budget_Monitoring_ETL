@@ -49,6 +49,21 @@ def Fact_Transaction_Tab_Cleanning():
 
     print("Data cleaning complete. Cleaned file saved as 'cleaned_file.csv'.")
 
+def Bill_Category(x):
+    if  'ACHAT CB' in x:
+        return 'Expense'
+    elif 'PRELEVEMENT' in x:
+        return 'Subscription'
+    else:
+        return 'To_Define'
+
+def Bill_Category_Code(x):
+    if  'Expense' in x:
+        return 666
+    elif 'Subscription' in x:
+        return 261
+    else:
+        return 111
 
 def Dim_Bill_Tab_Cleanning():
     # Load the CSV file into a DataFrame
@@ -67,16 +82,22 @@ def Dim_Bill_Tab_Cleanning():
     #Create Unique INT Id 
     df['Id_Bill'] = range(1, len(df) + 1)
 
-    #Rearange Columns 
-    new_order = ['Id_Bill', 'Bill_Label']  
-    df = df[new_order]
+    #Define Bill Category
+    df['Bill_Category'] = df['Bill_Label'].apply(Bill_Category)
 
+    #Define Bill Category
+    df['Id_Bill_Category'] = df['Bill_Category'].apply(Bill_Category_Code) 
+                           
     #test = df['Libele_Achat'].unique
+    
+    #Rearange Columns 
+    new_order = ['Id_Bill', 'Bill_Label','Id_Bill_Category','Bill_Category']  
+    df = df[new_order]
 
     print(df)
 
     # Save the cleaned DataFrame back to a CSV file
-    df.to_csv('C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/2_Silver/Dim_Bill.csv', sep=';', index=False)
+    df.to_csv('C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/2_Silver/Dim_Bill_Detail.csv', sep=';', index=False)
 
 if __name__ == "__main__":
     
