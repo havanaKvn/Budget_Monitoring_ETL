@@ -64,7 +64,29 @@ def extract_raw_transaction(file_path,leng):
         file.write(chunk)
         # Close the file
         file.close() 
-       
+
+def delet_Header():
+
+    path = 'C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/1_Bronze/Transactions_Extracted_0_2024-11-03.csv'
+    stored_in = "C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/1_Bronze/"
+    
+    with open(path, 'r') as file:
+        text = file.read()
+
+    # Split the text by two or more consecutive newline characters
+    # Each empty line is typically represented by '\n\n' in text files
+    chunks = text.split(')')
+ 
+    for chunk in chunks:
+    
+        # Open a file in write mode
+        file = open(stored_in + "Transactions_No_Header_"+ str(today)+ ".csv", "w")
+        # Write some text to the file
+        file.write(chunk)
+        # Close the file
+        file.close()
+    
+    print(1)     
 
 def Combine_All_Files(path):
 
@@ -95,7 +117,9 @@ if __name__ == "__main__":
     #extract_account_details(file_path)
 
     # Path to the folder containing CSV files
-    path = 'C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/1_Bronze/*.txt'
-    Combine_All_Files(path)
+    #path = 'C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/1_Bronze/*.txt'
+    #Combine_All_Files(path)
+
+    delet_Header()
 
     print("Extract Succed on " + str(today))
