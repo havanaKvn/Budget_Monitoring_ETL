@@ -29,6 +29,8 @@ def Bill_Category(x):
         return 'Expense'
     elif 'PRELEVEMENT' in x:
         return 'Subscription'
+    elif 'VIREMENT DE CGI FRANCE S.A.S. NOTPROVIDED REFERENCE' in x:
+        return 'Salary'
     else:
         return 'To_Define'
 
@@ -37,6 +39,8 @@ def Bill_Category_Code(x):
         return 666
     elif 'Subscription' in x:
         return 261
+    elif 'Salary' in x:
+        return 777
     else:
         return 111
     
