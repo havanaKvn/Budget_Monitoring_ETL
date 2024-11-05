@@ -59,36 +59,13 @@ def extract_raw_transaction(file_path,leng):
     
     for chunk in chunks:
         # Open a file in write mode
-        file = open(stored_in + "Transactions_Extracted_" +str(leng)+"_"+ str(today)+ ".csv", "w")
+        file = open(stored_in + "Transactions_Raw_" +str(leng)+"_"+ str(today)+ ".csv", "w")
         # Write some text to the file
         file.write(chunk)
         # Close the file
         file.close() 
 
-def delet_Header():
-
-    path = 'C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/1_Bronze/Transactions_Extracted_0_2024-11-03.csv'
-    stored_in = "C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/1_Bronze/"
-    
-    with open(path, 'r') as file:
-        text = file.read()
-
-    # Split the text by two or more consecutive newline characters
-    # Each empty line is typically represented by '\n\n' in text files
-    chunks = text.split(')')
- 
-    for chunk in chunks:
-    
-        # Open a file in write mode
-        file = open(stored_in + "Transactions_No_Header_"+ str(today)+ ".csv", "w")
-        # Write some text to the file
-        file.write(chunk)
-        # Close the file
-        file.close()
-    
-    print(1)     
-
-def Combine_All_Files(path):
+def extract_raw_transaction_All_Files(path):
 
     # Read all CSV files in the folder
     all_files = glob.glob(path)
@@ -100,15 +77,55 @@ def Combine_All_Files(path):
     for file in all_files:
         leng = leng - 1
         extract_raw_transaction(file,leng)
-       
-        
-        #df = pd.read_csv(file)
-        #df_list.append(df)
 
+''' To DRop
+def delet_Header(path,leng):
+
+    #path = 'C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/1_Bronze/Transactions_Extracted_0_2024-11-03.csv'
+    stored_in = "C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/2_Silver/"
+    
+    with open(path, 'r') as file:
+        text = file.read()
+
+    # Split the text by two or more consecutive newline characters
+    # Each empty line is typically represented by '\n\n' in text files
+    chunks = text.split(')')
+ 
+    for chunk in chunks:
+    
+        # Open a file in write mode
+        file = open(stored_in + "Transactions_No_Header_" +str(leng)+"_"+ str(today)+ ".csv", "w")
+        # Write some text to the file
+        file.write(chunk)
+        # Close the file
+        file.close()
+    
+    print(1)     
+'''
+
+def Combine_All_Files(path):
+    stored_in = "C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/2_Silver/"
+    # Read all CSV files in the folder
+    all_files = glob.glob(path)
+
+    # List to store DataFrames
+    df_list = []
+    leng = len(all_files)
+    i = 0
+    
+    # Iterate over the list of files and read each one
+    for file in all_files:
+      df = pd.read_csv(file,delimiter=';',encoding='cp1252')
+      df_list.append(df)
+     
     # Concatenate all DataFrames into one
-    #combined_df = pd.concat(df_list, ignore_index=True)
+    combined_df = pd.concat(df_list, ignore_index=True)
+    combined_df.drop_duplicates(inplace = True)
+    combined_df.to_csv(stored_in + 'Transaction_Extracted_Combined.csv', sep=';', index=False)
 
-        #print(leng)    
+
+         
+    print(combined_df)  
 
 if __name__ == "__main__":
     # Provide the path to your text file
@@ -117,9 +134,10 @@ if __name__ == "__main__":
     #extract_account_details(file_path)
 
     # Path to the folder containing CSV files
-    #path = 'C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/1_Bronze/*.txt'
-    #Combine_All_Files(path)
+    path = 'C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/1_Bronze/*.csv'
+    #extract_raw_transaction_All_Files(path)
 
-    delet_Header()
+    #delet_Header()
+    Combine_All_Files(path)
 
     print("Extract Succed on " + str(today))
