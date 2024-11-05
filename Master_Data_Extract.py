@@ -8,7 +8,8 @@ today = date.today()
 
 # Provide the path to your text file   
 #file_path = "C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/2_Silver/Transactions_Extracted_" + str(today)+".txt"
-file_path = 'C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/2_Silver/Transactions_Extracted_2024-10-09.csv'
+#file_path = 'C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/2_Silver/Transactions_Extracted_2024-10-09.csv'
+file_path = 'C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/2_Silver/Transaction_Extracted_Combined.csv'
 #file_path = "..\Data\2_Silver\Transactions_Extracted_" + str(today)+".txt"
 #with open('Transactions_Extracted_2024-10-09.csv', 'r') as file:
     #text = file.read()
@@ -19,8 +20,8 @@ def Extract_Long_Date(date_list):
     #return date_object.strftime('%d/%B/%Y')
     return date_object.strftime('%m/%d/%Y')
 
-def Convert_Price_Format(price):
-    new_value = price.replace(',', '.')
+def Convert_Amount_Format(Amount):
+    new_value = Amount.replace(',', '.')
     return new_value
 
 def Bill_Category(x):
@@ -45,7 +46,7 @@ def Fact_Transaction_Explicite():
     #print(df.head())
 
     # Rename columns (replace 'old_name' and 'new_name' with actual names)
-    df.rename(columns={'Libellï¿½': 'Bill_Label', 'Montant(EUROS)': 'Price'}, inplace=True)
+    df.rename(columns={'Libelle': 'Bill_Label', 'Montant(EUROS)': 'Amount'}, inplace=True)
     
     #Create Unique INT Id 
     df['Id_Bill'] = range(1, len(df) + 1)
@@ -59,13 +60,13 @@ def Fact_Transaction_Explicite():
     #Define Long Date
     df['Date_Formated'] = [Extract_Long_Date(date_) for date_ in df['Date']]
 
-    #Format Price
-    df['Price'] = [Convert_Price_Format(Price) for Price in df['Price']]
+    #Format Amount
+    df['Amount'] = [Convert_Amount_Format(Amount) for Amount in df['Amount']]
                            
     #test = df['Libele_Achat'].unique
     
     #Rearange Columns 
-    new_order = ['Date','Date_Formated', 'Bill_Label','Price','Id_Bill','Id_Bill_Category','Bill_Category']  
+    new_order = ['Date','Date_Formated', 'Bill_Label','Amount','Id_Bill','Id_Bill_Category','Bill_Category']  
     df = df[new_order] 
 
     #print(df)
@@ -88,13 +89,13 @@ def Fact_Transaction_Tab_Cleanning():
     df.rename(columns={'Date_Formated': 'Date'}, inplace=True)
 
     #Rearange Columns 
-    new_order = ['Date','Id_Bill','Id_Bill_Category','Price']  
+    new_order = ['Date','Id_Bill','Id_Bill_Category','Amount']  
     df = df[new_order]
 
     # Save the cleaned DataFrame back to a CSV file
     df.to_csv('C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/3_Gold/Fact_Transaction.csv', sep=';', index=False)
 
-    print(df)
+    #print(df)
 
 def Dim_Bill_Tab_Cleanning():
 
@@ -106,7 +107,7 @@ def Dim_Bill_Tab_Cleanning():
     df.drop(columns=['Date', 'Montant(EUROS)'], inplace=True)
 
     # Rename columns (replace 'old_name' and 'new_name' with actual names)
-    df.rename(columns={'Libellï¿½': 'Bill_Label'}, inplace=True)
+    df.rename(columns={'Libelle': 'Bill_Label'}, inplace=True)
 
     #Create Unique Id with uuid() function
     #df['Id_Bill'] = [uuid.uuid4().hex for _ in range(len(df))]
@@ -126,15 +127,15 @@ def Dim_Bill_Tab_Cleanning():
     new_order = ['Id_Bill', 'Bill_Label','Id_Bill_Category','Bill_Category']  
     df = df[new_order]
 
-    print(df)
+    #print(df)
 
     # Save the cleaned DataFrame back to a CSV file
-    df.to_csv('C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/2_Silver/Dim_Bill_Detail.csv', sep=';', index=False)
+    df.to_csv('C:/Users/kevin/OneDrive/Bureau/Personal_Project/Budget_Monitoring/Data/3_Gold/Dim_Bill_Detail.csv', sep=';', index=False)
 
 if __name__ == "__main__":
     
     Fact_Transaction_Explicite()
-    #Dim_Bill_Tab_Cleanning()
+    Dim_Bill_Tab_Cleanning()
     Fact_Transaction_Tab_Cleanning()
     
     print("Extract Succed on " + str(today))
